@@ -1,0 +1,60 @@
+E## Put comments here that give an overall description of what your
+## functions do:
+##
+##
+## get the input of  a square invertible matrix into the matrix variable x
+## output: a list containing functions to
+##              1. set the matrix
+##              2. get the matrix
+##              3. set the inverse
+##              4. get the inverse
+##         this list is used as the handover  to the cacheSolve() function which generates the inverse matrix
+
+
+## Write a short comment describing this function:
+## prepare the matrix to be inverted which gives a list with the containing functions
+
+
+makeCacheMatrix <- function(x = matrix()) {
+  
+  inv_var = NULL
+  set = function(y) {
+    # use `<<-` to assign y to x in an environment 
+    # different from the current environment. 
+    x <<- y
+    inv_var <<- NULL
+  }
+  get = function() x
+  setinv = function(inverse) inv_var <<- inverse 
+  getinv = function() inv_var
+  list(set=set, get=get, setinv=setinv, getinv=getinv)
+}
+
+
+
+
+## Write a short comment describing this function
+
+cacheSolve <- function(x, ...) {
+        ## Return a matrix that is the inverse of the given matrix
+  ## input: handover from makeCacheMatrix()
+  ## output: inverse of the original matrix input to makeCacheMatrix()
+  
+  inv_handover = x$getinv()
+  
+  # check if the inverse has already been calculated
+  if (!is.null(inv_handover)){
+    # computation is obsolete & get it from the cache  
+    message("getting cached data")
+    return(inv_handover)
+  }
+  
+  # Else case, calculate the inverse 
+  mat.data = x$get()
+  inv_handover = solve(mat.data, ...)
+  
+  # store the values of the inverse matrix  in the cache by applying the setinv function.
+  x$setinv(inv_handover)
+  
+  return(inv_handover)
+}
